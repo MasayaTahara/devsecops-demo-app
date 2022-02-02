@@ -1,6 +1,15 @@
 version: 0.2
 
 phases:
+  pre_build:
+    commands:
+      - npm -v
   build:
     commands:
-      - echo Hello
+      - npm run build
+  post_build:
+    commands:
+      # Delete existing contents
+      - aws s3 rm s3://devsecops-demo-website/ --recursive
+      # Deploy static contents
+      - aws s3 cp build/ s3://devsecops-demo-website/ --recursive
